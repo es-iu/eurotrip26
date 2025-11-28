@@ -1,0 +1,1285 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Europe Honeymoon Planner – Quiz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #fff8f1;
+      --bg-alt: #fef3c7;
+      --accent: #f97316;       /* orange */
+      --accent-soft: #fed7aa;
+      --accent-2: #22c55e;     /* green */
+      --accent-3: #3b82f6;     /* blue */
+      --danger: #ef4444;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --card: #ffffff;
+      --border-subtle: #e5e7eb;
+      --radius-lg: 18px;
+      --shadow-soft: 0 18px 35px rgba(248, 180, 88, 0.35);
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-main);
+      background: radial-gradient(circle at top, #fffbeb 0, #ffe4e6 30%, #cffafe 70%);
+      color: var(--text-main);
+    }
+
+    .page-shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 16px 20px 14px;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(16px);
+      background: linear-gradient(
+        135deg,
+        rgba(251, 191, 36, 0.18),
+        rgba(248, 113, 113, 0.16),
+        rgba(59, 130, 246, 0.12),
+        rgba(255, 255, 255, 0.9)
+      );
+      border-bottom: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header h1 {
+      margin: 0 0 2px;
+      font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+      letter-spacing: 0.03em;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    main {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 16px 20px 28px;
+    }
+
+    /* Tabs */
+
+    .tabs {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 3px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: 0 12px 26px rgba(148, 163, 184, 0.45);
+      margin-bottom: 16px;
+    }
+
+    .tab-btn {
+      border-radius: 999px;
+      border: none;
+      padding: 6px 18px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-muted);
+      transition: all 0.16s ease-out;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #f97316, #fb7185);
+      color: #ffffff;
+      box-shadow: 0 8px 18px rgba(248, 113, 113, 0.4);
+    }
+
+    /* Layout containers */
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    /* QUIZ */
+
+    .quiz-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.6fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .quiz-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .quiz-card {
+      border-radius: var(--radius-lg);
+      padding: 16px 16px 18px;
+      background: radial-gradient(circle at top left, #fee2e2, #fef3c7, #ffffff);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .quiz-card h2 {
+      margin: 0 0 4px;
+      font-size: 1.05rem;
+    }
+
+    .quiz-sub {
+      margin: 0 0 10px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .step-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill {
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(255, 255, 255, 0.95);
+      color: var(--text-main);
+      cursor: pointer;
+      display: inline-flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.16s ease-out;
+      min-width: 150px;
+    }
+
+    .pill span.label {
+      font-weight: 600;
+    }
+
+    .pill span.sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .pill.selected {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, #ffedd5, #fee2e2);
+      box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.6);
+    }
+
+    /* ranking list */
+
+    .rank-list {
+      list-style: none;
+      padding: 0;
+      margin: 6px 0 0;
+      border-radius: 14px;
+      border: 1px dashed rgba(148, 163, 184, 0.8);
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .rank-item {
+      padding: 7px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 0.86rem;
+      cursor: grab;
+      background: #ffffff;
+    }
+
+    .rank-item:last-child {
+      border-bottom: none;
+    }
+
+    .rank-item.drag-over {
+      background: #fef3c7;
+    }
+
+    .rank-number {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #7c2d12;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .rank-label {
+      flex: 1;
+    }
+
+    .rank-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* complexity pills */
+
+    .complexity-pill {
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(255, 255, 255, 0.95);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 170px;
+      transition: all 0.16s ease-out;
+    }
+
+    .complexity-pill.selected {
+      border-color: var(--accent-3);
+      background: linear-gradient(135deg, #e0f2fe, #fef3c7);
+      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.55);
+    }
+
+    .quiz-footer {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .helper {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    .btn-primary {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 18px;
+      font-size: 0.86rem;
+      cursor: pointer;
+      background: linear-gradient(135deg, #f97316, #fb7185);
+      color: #ffffff;
+      box-shadow: 0 12px 24px rgba(248, 113, 113, 0.5);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 0.7rem;
+      background: var(--accent-soft);
+      color: #7c2d12;
+    }
+
+    .badge.recommended {
+      background: #22c55e1a;
+      color: #166534;
+      border: 1px solid #22c55e66;
+    }
+
+    /* COMPARE */
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    @media (max-width: 900px) {
+      .compare-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .route-card {
+      border-radius: 22px;
+      background: #ffffff;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      box-shadow: 0 18px 32px rgba(148, 163, 184, 0.5);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .route-media {
+      height: 170px;
+      background: linear-gradient(135deg, #f97316, #fb7185, #0ea5e9);
+      position: relative;
+    }
+
+    .route-media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle at 20% -10%, rgba(255, 255, 255, 0.6), transparent),
+        radial-gradient(circle at 80% 120%, rgba(56, 189, 248, 0.7), transparent);
+      mix-blend-mode: screen;
+      opacity: 0.8;
+    }
+
+    .route-body {
+      padding: 12px 16px 14px;
+      font-size: 0.85rem;
+    }
+
+    .route-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .route-name {
+      font-weight: 600;
+      font-size: 0.96rem;
+    }
+
+    .tag {
+      font-size: 0.72rem;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fed7aa;
+    }
+
+    .route-summary {
+      margin: 0 0 6px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .stat-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 3px;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .stat-value {
+      font-size: 0.82rem;
+    }
+
+    .hassle {
+      font-size: 0.8rem;
+      margin-bottom: 4px;
+    }
+
+    .hassle span.score {
+      font-weight: 600;
+    }
+
+    .hassle.low {
+      color: #16a34a;
+    }
+
+    .hassle.med {
+      color: #ea580c;
+    }
+
+    .hassle.high {
+      color: #dc2626;
+    }
+
+    .pros-cons {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      margin: 4px 0 6px;
+    }
+
+    .pros-cons h4 {
+      margin: 0 0 2px;
+      font-size: 0.8rem;
+    }
+
+    .pros-list,
+    .cons-list {
+      margin: 0;
+      padding-left: 16px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .route-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .btn-small {
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: #f9fafb;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .btn-small.primary {
+      border-color: transparent;
+      background: linear-gradient(135deg, #f97316, #22c55e);
+      color: #ffffff;
+      box-shadow: 0 10px 18px rgba(248, 113, 113, 0.5);
+    }
+
+    .route-card.recommended {
+      border-color: #22c55eAA;
+      box-shadow: 0 20px 36px rgba(34, 197, 94, 0.55);
+    }
+
+    /* ITINERARY */
+
+    .itinerary-container {
+      border-radius: 22px;
+      background: #ffffff;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      box-shadow: 0 18px 32px rgba(148, 163, 184, 0.55);
+      padding: 14px 16px 16px;
+    }
+
+    .itinerary-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .itinerary-header h2 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .itinerary-header span {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .itinerary-intro {
+      margin: 0 0 8px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .itinerary-table-wrapper {
+      max-height: min(62vh, 520px);
+      overflow: auto;
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+
+    th,
+    td {
+      padding: 7px 8px;
+      vertical-align: top;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      background: #fffbeb;
+      z-index: 1;
+      text-align: left;
+    }
+
+    tbody tr:nth-child(even) td {
+      background: #f9fafb;
+    }
+
+    tbody tr:nth-child(odd) td {
+      background: #ffffff;
+    }
+
+    td:nth-child(1) {
+      white-space: nowrap;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    @media (max-width: 720px) {
+      th:nth-child(5),
+      td:nth-child(5) {
+        display: none;
+      }
+    }
+
+    .empty-itinerary {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="page-shell">
+  <header>
+    <div class="header-inner">
+      <h1>Europe Honeymoon Planner</h1>
+      <p>June 15–30, 2026 · Find your perfect route through Germany, Bulgaria &amp; Greece.</p>
+    </div>
+  </header>
+  <main>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="quiz-screen">Quiz</button>
+      <button class="tab-btn" data-tab="compare-screen">Compare Routes</button>
+      <button class="tab-btn" data-tab="itinerary-screen">Itinerary</button>
+    </div>
+
+    <!-- QUIZ SCREEN -->
+    <section id="quiz-screen" class="screen active">
+      <div class="quiz-layout">
+        <section class="quiz-card">
+          <div class="step-label">Step 1</div>
+          <h2>Pick your overall vibe</h2>
+          <p class="quiz-sub">What should this honeymoon feel like most of the time?</p>
+          <div class="pill-row" id="vibe-options">
+            <button class="pill" data-value="relax">
+              <span class="label">Total Switch-Off</span>
+              <span class="sub">“Park us on a terrace with views and let us melt into the sunset.”</span>
+            </button>
+            <button class="pill" data-value="balanced">
+              <span class="label">Balanced Adventure</span>
+              <span class="sub">“Some exploring, some lazy days – we want both stories and naps.”</span>
+            </button>
+            <button class="pill" data-value="adventure">
+              <span class="label">Max Exploration</span>
+              <span class="sub">“We love moving around and packing in experiences.”</span>
+            </button>
+          </div>
+
+          <div style="height:16px"></div>
+
+          <div class="step-label">Step 2</div>
+          <h2>Rank what matters most</h2>
+          <p class="quiz-sub">Drag to reorder – top of the list is your #1 priority.</p>
+          <ul class="rank-list" id="priority-list">
+            <li class="rank-item" draggable="true" data-key="romance">
+              <div class="rank-number">1</div>
+              <div class="rank-label">
+                Romance &amp; intimacy
+                <div class="rank-sub">Time together, slow mornings, candlelight dinners.</div>
+              </div>
+            </li>
+            <li class="rank-item" draggable="true" data-key="culture">
+              <div class="rank-number">2</div>
+              <div class="rank-label">
+                Culture &amp; history
+                <div class="rank-sub">Old streets, museums, stories, architecture.</div>
+              </div>
+            </li>
+            <li class="rank-item" draggable="true" data-key="food">
+              <div class="rank-number">3</div>
+              <div class="rank-label">
+                Food &amp; wine
+                <div class="rank-sub">Memorable meals, cafés and local specialties.</div>
+              </div>
+            </li>
+            <li class="rank-item" draggable="true" data-key="nature">
+              <div class="rank-number">4</div>
+              <div class="rank-label">
+                Views &amp; nature
+                <div class="rank-sub">Sea views, sunsets, hikes, beaches.</div>
+              </div>
+            </li>
+          </ul>
+          <p class="guided-tip" style="font-size:0.75rem;margin-top:6px;">
+            Tip: If you’re torn, just put what you’d be saddest to miss at the top.
+          </p>
+        </section>
+
+        <section class="quiz-card">
+          <div class="step-label">Step 3</div>
+          <h2>How much logistics can you handle?</h2>
+          <p class="quiz-sub">Think about packing/unpacking, airport days and moving between cities.</p>
+          <div class="pill-row" id="complexity-options">
+            <button class="complexity-pill" data-value="low">
+              <span class="label">Keep it ultra-simple</span>
+              <span class="sub">“We’d love as few flights and hotel changes as possible.”</span>
+            </button>
+            <button class="complexity-pill" data-value="medium">
+              <span class="label">Some complexity is okay</span>
+              <span class="sub">“A couple of moves are fine if the experience is worth it.”</span>
+            </button>
+            <button class="complexity-pill" data-value="high">
+              <span class="label">Bring it on, we’re pros</span>
+              <span class="sub">“We’re used to travel days and don’t mind extra connections.”</span>
+            </button>
+          </div>
+
+          <div class="quiz-footer">
+            <span class="helper" id="quiz-helper">
+              Answer all three steps and I’ll suggest the route that fits you best.
+            </span>
+            <button class="btn-primary" id="see-matches-btn" disabled>
+              See my route matches
+            </button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- COMPARE SCREEN -->
+    <section id="compare-screen" class="screen">
+      <p style="font-size:0.86rem;color:var(--text-muted);margin-bottom:10px;" id="compare-intro">
+        Take the quiz to highlight your best-fit route, or browse all four options side-by-side.
+      </p>
+      <div class="compare-grid" id="compare-grid"></div>
+    </section>
+
+    <!-- ITINERARY SCREEN -->
+    <section id="itinerary-screen" class="screen">
+      <div class="itinerary-container">
+        <div id="itinerary-content" class="empty-itinerary">
+          Choose a route from the <strong>Compare Routes</strong> tab or from the quiz results to see a detailed 14-day itinerary.
+        </div>
+      </div>
+    </section>
+  </main>
+  <div class="footer-note" style="max-width:1200px;margin:0 auto 18px;padding:0 20px 4px;font-size:0.74rem;color:var(--text-muted);">
+    Scores and suggestions are based on general patterns. Use this as a friendly starting point, then adjust dates and details to match your energy in the moment.
+  </div>
+</div>
+
+<script>
+  // ---------- Data for routes & itineraries ----------
+
+  const routes = [
+    {
+      id: "maximumChill",
+      name: "Maximum Chill",
+      tag: "Greece only",
+      summary: "Athens + Santorini · no country-hopping, maximum caldera and café time.",
+      priceRange: "$700–1,000",
+      travelTime: "10–12 hours total travel",
+      flights: "3 flights, 1 connection",
+      hassleScore: 3,
+      hassleClass: "low",
+      pros: [
+        "Simplest logistics – only one country",
+        "Frequent Athens–Santorini flights",
+        "Lots of time to fully settle into one island rhythm"
+      ],
+      cons: [
+        "Less cultural variety than multi-country routes",
+        "Could feel a bit repetitive after 14 days if you crave change"
+      ],
+      profile: {
+        relax: 3,
+        adventure: 1,
+        balanced: 2,
+        romance: 3,
+        culture: 2,
+        food: 3,
+        nature: 3,
+        complexity: 1 // 1 = low, 2 = medium, 3 = high
+      },
+      itineraryIntro: "Two weeks of Greece-only relaxation with a mix of Athens energy and long, dreamy days on Santorini.",
+      itinerary: [
+        ["Day 1", "NYC → Athens (overnight)", "Travel & soften into the trip", "Evening departure, try to sleep and hydrate on the plane.", "Keep plans light around flight times and give yourselves space to rest once you arrive."],
+        ["Day 2", "Athens", "Soft landing in the city", "Check into a hotel in Plaka or Koukaki, short evening walk, early dinner with Acropolis views.", "Treat this as a flexible day and adjust the pace depending on how rested you feel."],
+        ["Day 3", "Athens", "History hit", "Morning at the Acropolis, brunch, Acropolis Museum, sunset drink on a rooftop bar.", "Aim for an early entry ticket to beat crowds and heat; nap in the afternoon if you need it."],
+        ["Day 4", "Athens", "Neighborhoods & food", "Explore Monastiraki and Psirri, join a food tour or cooking class in the evening.", "Don’t over-schedule; leave room for a spontaneous café or shop that catches your eye."],
+        ["Day 5", "Athens → Santorini", "Travel + first caldera sunset", "Short flight to Santorini, check into caldera-view hotel, sunset from your terrace.", "Give yourselves permission to do nothing except enjoy the view this evening."],
+        ["Day 6", "Santorini", "Zero-pressure island day", "Slow breakfast, pool time, short wander into town, casual dinner nearby.", "Treat this as a flexible day and adjust the pace depending on how rested or adventurous you feel."],
+        ["Day 7", "Santorini", "Photos & wandering", "Early-morning stroll through Oia or Imerovigli for photos before crowds arrive.", "Head back to the hotel before midday heat; pick one spot for sunset instead of rushing around."],
+        ["Day 8", "Santorini", "Boat day", "Catamaran cruise with swimming stops, hot springs and dinner onboard.", "Consider weather and sea conditions, and pack sunscreen, hats and motion-sickness meds if needed."],
+        ["Day 9", "Santorini", "Beach day", "Black-sand beach (Perissa or Kamari), long lunch, reading under an umbrella.", "Bring plenty of water, sun protection and a good book; leave whenever you’re done with sun and noise."],
+        ["Day 10", "Santorini", "Wine & views", "Visit 1–2 wineries such as Santo Wines or Venetsanos, slow sunset tasting.", "Book tastings ahead if you want sunset seats and let one of you stay under the driving limit."],
+        ["Day 11", "Santorini", "Free adventure day", "Optional hike, ATV exploration or a visit to Pyrgos or Akrotiri.", "Start earlier in the day if you hike, wear proper shoes and shorten the route if it feels like too much."],
+        ["Day 12", "Santorini", "Spa & romance", "Couples massage or spa afternoon, low-key dinner and stargazing from the balcony.", "Switch off phones and treat the evening as a mini digital detox."],
+        ["Day 13", "Santorini", "Last full island day", "Revisit your favorite café, beach or viewpoint, pack slowly in the afternoon.", "Avoid overfilling your final day – leave a little unplanned time to just soak it in."],
+        ["Day 14", "Santorini → Athens → NYC", "Travel home", "Fly back to Athens, connect onward to NYC.", "Keep plans light around flight times and give yourselves space to rest once you arrive home."]
+      ]
+    },
+    {
+      id: "cityIsland",
+      name: "City + Island",
+      tag: "Germany + Greece",
+      summary: "Munich + Santorini + Athens · one European city, one dreamy island, one historic capital.",
+      priceRange: "$900–1,300",
+      travelTime: "14–16 hours total travel",
+      flights: "4 flights, 1 connection",
+      hassleScore: 5,
+      hassleClass: "med",
+      pros: [
+        "Great city + island balance",
+        "Direct Munich–Santorini flights available in season",
+        "Tastes of both central Europe and the Mediterranean"
+      ],
+      cons: [
+        "Medium-complexity logistics with a few flight days",
+        "Munich–Santorini flights only on certain days of the week"
+      ],
+      profile: {
+        relax: 2,
+        adventure: 2,
+        balanced: 3,
+        romance: 3,
+        culture: 3,
+        food: 3,
+        nature: 3,
+        complexity: 2
+      },
+      itineraryIntro: "A mix of Bavarian city life, legendary Greek sunsets and a taste of Athens – without going full backpacker mode.",
+      itinerary: [
+        ["Day 1", "NYC → Munich (overnight)", "Travel & soften in", "Evening nonstop from JFK to Munich; aim to sleep as much as you can.", "Keep plans light for your arrival day and let this flight mark the mental start of the honeymoon."],
+        ["Day 2", "Munich", "Gentle city wandering", "Check into a hotel near the Altstadt, stroll Marienplatz and Viktualienmarkt, early dinner in a beer garden.", "Treat jet lag kindly; keep the evening short and skip anything that feels like a “must-see.”"],
+        ["Day 3", "Munich", "One highlight day", "Visit Nymphenburg Palace or the Residenz, spend time in the English Garden.", "Pick just one big attraction so the day still feels relaxing, not like a checklist."],
+        ["Day 4", "Munich → Santorini", "Travel + first island sunset", "Direct flight to Santorini, check in to a caldera-view stay in Oia, Imerovigli or Firostefani.", "Give yourselves permission to simply sit on the balcony and watch the light change."],
+        ["Day 5", "Santorini", "Unplug & settle", "Late breakfast, pool time, short wander into town, simple dinner close to the hotel.", "Treat this as a flexible day and adjust the pace depending on how rested or adventurous you feel."],
+        ["Day 6", "Santorini", "Photo wander", "Morning walk through Oia’s alleys for photos, afternoon siesta, sunset drinks.", "Go early for iconic photo spots so you’re not fighting crowds later in the day."],
+        ["Day 7", "Santorini", "Boat day", "Caldera cruise with swimming stops, hot springs and dinner onboard.", "Consider weather and sea conditions, and pack sunscreen, hats and motion-sickness meds if needed."],
+        ["Day 8", "Santorini", "Beach & wine", "Beach time at Perissa or Kamari, afternoon wine tasting at a local winery.", "Bring plenty of water and plan transport so no one has to drive after tastings."],
+        ["Day 9", "Santorini", "Optional Fira–Oia hike", "Morning hike along the rim trail (or a shorter segment), lazy afternoon by the pool.", "Start earlier in the day, wear proper shoes and don’t hesitate to shorten the walk if it’s hot."],
+        ["Day 10", "Santorini", "Free play day", "Revisit any favorite spot or add an extra mini-adventure like an ATV ride.", "Keep at least half a day unscheduled so you can follow whatever sounds best in the moment."],
+        ["Day 11", "Santorini → Athens", "Travel + Athens intro", "Short flight to Athens, sunset walk through Plaka, dinner with Acropolis views.", "Choose a hotel in an area you can enjoy on foot so you’re not figuring out transit when tired."],
+        ["Day 12", "Athens", "Culture day", "Morning at the Acropolis, lunch, visit the Acropolis Museum, evening rooftop bar.", "Buy tickets in advance where possible and retreat to air-conditioned spaces in midday heat."],
+        ["Day 13", "Athens", "Neighborhoods & food", "Explore markets and neighborhoods like Monastiraki or Psirri, enjoy a slow final dinner.", "End the day somewhere relaxed rather than trying to squeeze in one last “big thing.”"],
+        ["Day 14", "Athens → NYC", "Travel home", "Flight back to NYC, ideally mid-morning or early afternoon.", "Give yourselves an easy buffer before heading to the airport; future-you will thank you."]
+      ]
+    },
+    {
+      id: "familyIsland",
+      name: "Family + Island",
+      tag: "Bulgaria + Greece",
+      summary: "Sofia + Santorini · a few days of family time in Sofia, then a long island reset.",
+      priceRange: "$800–1,100",
+      travelTime: "16–18 hours total travel",
+      flights: "4 flights, 2 connections",
+      hassleScore: 6,
+      hassleClass: "med",
+      pros: [
+        "Time in Sofia with family or locals",
+        "More affordable overall than Germany routes",
+        "Feels both authentic and beachy"
+      ],
+      cons: [
+        "Requires a connection through Athens to reach Santorini",
+        "Less tourist infrastructure and English signage in Sofia"
+      ],
+      profile: {
+        relax: 2,
+        adventure: 2,
+        balanced: 3,
+        romance: 2,
+        culture: 3,
+        food: 3,
+        nature: 3,
+        complexity: 2
+      },
+      itineraryIntro: "Blend a few days of Eastern European city life with an extended stay on Santorini once the family time wraps.",
+      itinerary: [
+        ["Day 1", "NYC → Sofia (overnight via hub)", "Travel", "Fly from NYC via a European hub such as Vienna, Zurich, Frankfurt or Istanbul.", "Keep plans flexible for arrival; choose a routing that lands in Sofia by late morning or early afternoon."],
+        ["Day 2", "Sofia", "Soft landing & first stroll", "Check into a central hotel, walk Vitosha Boulevard and see Aleksandar Nevski Cathedral.", "Plan a simple dinner near your hotel so you can head to bed as soon as you feel tired."],
+        ["Day 3", "Sofia", "City & local flavor", "Coffee in a local café, explore the city garden and National Theatre area, relaxed dinner.", "Leave plenty of empty space for spontaneous café stops or time with people you meet."],
+        ["Day 4", "Sofia", "Optional day trip or free day", "Either a light excursion (e.g. Boyana Church & Vitosha foothills) or a pure rest + city day.", "Start earlier in the day if you go up into the hills and keep an eye on weather forecasts."],
+        ["Day 5", "Sofia → Athens → Santorini", "Travel + first island sunset", "Fly via Athens to Santorini; check into your hotel and enjoy a simple dinner with a view.", "Aim for at least a 90-minute connection in Athens so you’re not rushed between flights."],
+        ["Day 6", "Santorini", "Gentle island introduction", "Slow breakfast, pool time, short wander through the nearest town.", "Treat this as a flexible day and adjust the pace depending on how rested or adventurous you feel."],
+        ["Day 7", "Santorini", "Photo & view day", "Explore Oia or Imerovigli early, pause for long coffee breaks and sunset drinks.", "Pick one sunset spot that feels romantic and return there later in the trip if you love it."],
+        ["Day 8", "Santorini", "Boat day", "Caldera cruise with swimming, hot springs and an onboard meal.", "Consider weather and sea conditions, and pack sunscreen, hats and motion-sickness meds if needed."],
+        ["Day 9", "Santorini", "Beach time", "Relax at Perissa or Kamari beach, enjoy an easy seaside lunch.", "Bring plenty of water, sun protection and a good book; leave when you’ve had your fill of sun."],
+        ["Day 10", "Santorini", "Wine & village visit", "Visit a winery and explore a traditional village such as Pyrgos.", "Book tastings ahead if you want sunset slots and arrange safe transport back to your hotel."],
+        ["Day 11", "Santorini", "Free day", "Do anything you felt you missed – another beach, a favorite café or spa day.", "Keep at least half the day unscheduled so you can follow your energy and mood."],
+        ["Day 12", "Santorini", "Hike / culture option", "Optional visit to Akrotiri or part of the Fira–Oia trail.", "Start earlier in the day, wear proper shoes, and shorten any hike if it’s too hot."],
+        ["Day 13", "Santorini", "Last island day", "Savor one last long, slow day with your favorite view and food.", "Pack gradually so your final morning doesn’t feel hectic."],
+        ["Day 14", "Santorini → Athens → NYC", "Travel home", "Fly from Santorini via Athens back to NYC.", "Leave generous connection time in Athens to absorb small delays without stress."]
+      ]
+    },
+    {
+      id: "grandTour",
+      name: "Grand Tour",
+      tag: "3 countries",
+      summary: "Germany + Sofia + Santorini + Athens · the “we want everything in two weeks” route.",
+      priceRange: "$1,100–1,500",
+      travelTime: "18–20 hours total travel",
+      flights: "4 flights, 3 connections",
+      hassleScore: 8,
+      hassleClass: "high",
+      pros: [
+        "Maximum variety and experiences",
+        "See three very different cultures",
+        "Great for seasoned travelers who like movement"
+      ],
+      cons: [
+        "Most complex logistics and packing",
+        "Can feel rushed if you prefer to linger"
+      ],
+      profile: {
+        relax: 1,
+        adventure: 3,
+        balanced: 2,
+        romance: 2,
+        culture: 3,
+        food: 3,
+        nature: 3,
+        complexity: 3
+      },
+      itineraryIntro: "A fast-moving, story-packed two weeks across Germany, Bulgaria and Greece – best for couples who love variety and don’t fear travel days.",
+      itinerary: [
+        ["Day 1", "NYC → Munich/Berlin (overnight)", "Travel", "Evening nonstop to Munich or Berlin; sleep as much as possible.", "Choose whichever city gives you better times and prices, and keep arrival-day plans light."],
+        ["Day 2", "Munich or Berlin", "Jet-lag friendly city day", "Easy walk through the historic center, simple dinner, early night.", "Treat day two as a long, gentle stroll rather than a sightseeing sprint."],
+        ["Day 3", "Munich or Berlin", "One big highlight", "Pick a single major sight such as Nymphenburg Palace or the East Side Gallery.", "Resist the urge to cram multiple museums into one day so you still feel like you’re on vacation."],
+        ["Day 4", "Germany → Sofia", "Travel + evening in Sofia", "Short flight to Sofia, check in and have a relaxed dinner near the city center.", "Keep some buffer between flight arrival and dinner in case of delays."],
+        ["Day 5", "Sofia", "City exploration", "Walk Vitosha Boulevard, visit Aleksandar Nevski Cathedral and local parks.", "Pause for coffee or dessert whenever you feel like it instead of marching between sights."],
+        ["Day 6", "Sofia", "Optional excursion", "Possible half-day to Boyana Church or simply more city time and café hopping.", "Start earlier in the day for any excursion and return before you feel overtired."],
+        ["Day 7", "Sofia → Athens → Santorini", "Travel + first caldera sunset", "Fly via Athens to Santorini, settle into your hotel, sunset drink close by.", "Aim for at least a 90-minute connection so a small delay doesn’t derail your plans."],
+        ["Day 8", "Santorini", "Recovery & light exploring", "Sleep in, pool time, short wander into town, simple dinner.", "Treat this as your decompression day after several travel days in a row."],
+        ["Day 9", "Santorini", "Boat / adventure day", "Caldera cruise with swimming and views back to the cliffs.", "Consider weather and sea conditions, and bring a light jacket for wind on the water."],
+        ["Day 10", "Santorini", "Beach & wine", "Split the day between a beach and a winery visit.", "Pace yourselves so the evening stays calm rather than turning into another packed day."],
+        ["Day 11", "Santorini", "Free day", "Anything you felt rushed on earlier – another village, more pool time, or a mini-hike.", "Watch your energy and be willing to turn this into a full rest day if you need it."],
+        ["Day 12", "Santorini → Athens", "Travel + Athens intro", "Short hop to Athens, wander Plaka and Monastiraki, dinner with Acropolis views.", "Choose a centrally located hotel so everything you want is walkable tonight."],
+        ["Day 13", "Athens", "Culture & reflection", "Acropolis, Acropolis Museum and final Greek dinner.", "Book tickets ahead and leave time in the afternoon simply to sit and people-watch."],
+        ["Day 14", "Athens → NYC", "Travel home", "Fly back to NYC with a head full of stories and photos.", "Give yourselves a gentle last morning – breakfast, coffee, then airport, nothing more."]
+      ]
+    }
+  ];
+
+  // ---------- State ----------
+
+  const quizState = {
+    vibe: null,           // "relax" | "balanced" | "adventure"
+    complexity: null,     // "low" | "medium" | "high"
+    priorities: ["romance", "culture", "food", "nature"], // ordered
+    recommendation: null, // route id
+    selectedRoute: null   // for itinerary view
+  };
+
+  // ---------- Helpers ----------
+
+  function updateQuizButtonState() {
+    const btn = document.getElementById("see-matches-btn");
+    const helper = document.getElementById("quiz-helper");
+    if (quizState.vibe && quizState.complexity && quizState.priorities.length === 4) {
+      btn.disabled = false;
+      helper.textContent = "Ready when you are – click to see which route matches you best.";
+    } else {
+      btn.disabled = true;
+      helper.textContent = "Answer all three steps and I’ll suggest the route that fits you best.";
+    }
+  }
+
+  function setActiveTab(id) {
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.tab === id);
+    });
+    document.querySelectorAll(".screen").forEach(sec => {
+      sec.classList.toggle("active", sec.id === id);
+    });
+  }
+
+  function getRouteById(id) {
+    return routes.find(r => r.id === id);
+  }
+
+  // ---------- Quiz interactions ----------
+
+  // Step 1: vibe
+  document.querySelectorAll("#vibe-options .pill").forEach(pill => {
+    pill.addEventListener("click", () => {
+      document.querySelectorAll("#vibe-options .pill").forEach(p => p.classList.remove("selected"));
+      pill.classList.add("selected");
+      quizState.vibe = pill.dataset.value;
+      updateQuizButtonState();
+    });
+  });
+
+  // Step 3: complexity
+  document.querySelectorAll("#complexity-options .complexity-pill").forEach(pill => {
+    pill.addEventListener("click", () => {
+      document.querySelectorAll("#complexity-options .complexity-pill").forEach(p => p.classList.remove("selected"));
+      pill.classList.add("selected");
+      quizState.complexity = pill.dataset.value;
+      updateQuizButtonState();
+    });
+  });
+
+  // Step 2: ranking (drag and drop)
+  const priorityList = document.getElementById("priority-list");
+  let dragSrcEl = null;
+
+  function handleDragStart(e) {
+    dragSrcEl = this;
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", this.dataset.key);
+  }
+
+  function handleDragOver(e) {
+    if (e.preventDefault) e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    return false;
+  }
+
+  function handleDragEnter() {
+    this.classList.add("drag-over");
+  }
+
+  function handleDragLeave() {
+    this.classList.remove("drag-over");
+  }
+
+  function handleDrop(e) {
+    if (e.stopPropagation) e.stopPropagation();
+    this.classList.remove("drag-over");
+    if (dragSrcEl !== this) {
+      const children = Array.from(priorityList.children);
+      const fromIndex = children.indexOf(dragSrcEl);
+      const toIndex = children.indexOf(this);
+      if (fromIndex > -1 && toIndex > -1) {
+        if (fromIndex < toIndex) {
+          priorityList.insertBefore(dragSrcEl, this.nextSibling);
+        } else {
+          priorityList.insertBefore(dragSrcEl, this);
+        }
+        // update numbers and state
+        Array.from(priorityList.children).forEach((li, idx) => {
+          li.querySelector(".rank-number").textContent = idx + 1;
+        });
+        quizState.priorities = Array.from(priorityList.children).map(li => li.dataset.key);
+      }
+    }
+    updateQuizButtonState();
+    return false;
+  }
+
+  function handleDragEnd() {
+    Array.from(priorityList.children).forEach(li => li.classList.remove("drag-over"));
+  }
+
+  Array.from(priorityList.children).forEach(li => {
+    li.addEventListener("dragstart", handleDragStart);
+    li.addEventListener("dragover", handleDragOver);
+    li.addEventListener("dragenter", handleDragEnter);
+    li.addEventListener("dragleave", handleDragLeave);
+    li.addEventListener("drop", handleDrop);
+    li.addEventListener("dragend", handleDragEnd);
+  });
+
+  // ---------- Scoring algorithm ----------
+
+  function scoreRoutes() {
+    const vibe = quizState.vibe;
+    const complexityPref = quizState.complexity;
+    const order = quizState.priorities;
+
+    const vibeWeights = { relax: 3, balanced: 3, adventure: 3 };
+
+    const priorityWeights = [4, 3, 2, 1]; // order from top to bottom
+    const complexityMap = { low: 1, medium: 2, high: 3 };
+
+    const results = routes.map(route => {
+      const p = route.profile;
+      let score = 0;
+
+      // Vibe alignment
+      if (vibe === "relax") {
+        score += p.relax * vibeWeights.relax + p.balanced * 1;
+      } else if (vibe === "balanced") {
+        score += p.balanced * vibeWeights.balanced + p.relax + p.adventure;
+      } else if (vibe === "adventure") {
+        score += p.adventure * vibeWeights.adventure + p.balanced * 1;
+      }
+
+      // Priority ranking (romance, culture, food, nature)
+      order.forEach((key, idx) => {
+        const w = priorityWeights[idx];
+        if (key === "romance") score += p.romance * w;
+        if (key === "culture") score += p.culture * w;
+        if (key === "food") score += p.food * w;
+        if (key === "nature") score += p.nature * w;
+      });
+
+      // Complexity preference: small penalty when mismatch
+      const preferred = complexityMap[complexityPref];
+      const routeComplex = p.complexity;
+      const diff = Math.abs(preferred - routeComplex);
+      score -= diff * 3; // each step away from ideal subtracts points
+
+      // Small bonus for lower hassle overall to favor easier routes
+      score += Math.max(0, 10 - route.hassleScore) * 0.5;
+
+      return { id: route.id, score };
+    });
+
+    results.sort((a, b) => b.score - a.score);
+    quizState.recommendation = results[0].id;
+    return results;
+  }
+
+  // ---------- Compare routes rendering ----------
+
+  const compareGrid = document.getElementById("compare-grid");
+  const compareIntro = document.getElementById("compare-intro");
+
+  function renderCompare(results) {
+    compareGrid.innerHTML = "";
+
+    const recommendedId = results ? results[0].id : quizState.recommendation;
+    if (recommendedId) {
+      const best = getRouteById(recommendedId);
+      compareIntro.textContent =
+        "Based on your answers, this is your best-fit route (highlighted in green). You can still explore the others and switch anytime.";
+    }
+
+    routes.forEach(route => {
+      const card = document.createElement("article");
+      card.className = "route-card" + (route.id === recommendedId ? " recommended" : "");
+      card.dataset.routeId = route.id;
+
+      const media = document.createElement("div");
+      media.className = "route-media";
+      card.appendChild(media);
+
+      const body = document.createElement("div");
+      body.className = "route-body";
+
+      const headerRow = document.createElement("div");
+      headerRow.className = "route-header-row";
+      const nameEl = document.createElement("div");
+      nameEl.className = "route-name";
+      nameEl.textContent = route.name;
+      headerRow.appendChild(nameEl);
+
+      const badges = document.createElement("div");
+      const tagSpan = document.createElement("span");
+      tagSpan.className = "tag";
+      tagSpan.textContent = route.tag;
+      badges.appendChild(tagSpan);
+
+      if (route.id === recommendedId) {
+        const recSpan = document.createElement("span");
+        recSpan.className = "badge recommended";
+        recSpan.style.marginLeft = "6px";
+        recSpan.textContent = "Best match";
+        badges.appendChild(recSpan);
+      }
+      headerRow.appendChild(badges);
+      body.appendChild(headerRow);
+
+      const summary = document.createElement("p");
+      summary.className = "route-summary";
+      summary.textContent = route.summary;
+      body.appendChild(summary);
+
+      const stat1 = document.createElement("div");
+      stat1.className = "stat-row";
+      stat1.innerHTML = `<span class="stat-label">Estimated budget:&nbsp;</span><span class="stat-value">${route.priceRange}</span>`;
+      body.appendChild(stat1);
+
+      const stat2 = document.createElement("div");
+      stat2.className = "stat-row";
+      stat2.innerHTML = `<span class="stat-label">Total travel time:&nbsp;</span><span class="stat-value">${route.travelTime}</span>`;
+      body.appendChild(stat2);
+
+      const stat3 = document.createElement("div");
+      stat3.className = "stat-row";
+      stat3.innerHTML = `<span class="stat-label">Flights:&nbsp;</span><span class="stat-value">${route.flights}</span>`;
+      body.appendChild(stat3);
+
+      const hassle = document.createElement("div");
+      hassle.className = "hassle " + route.hassleClass;
+      hassle.innerHTML = `<span class="score">Hassle score: ${route.hassleScore}/10</span>`;
+      body.appendChild(hassle);
+
+      const prosCons = document.createElement("div");
+      prosCons.className = "pros-cons";
+      const prosCol = document.createElement("div");
+      const consCol = document.createElement("div");
+
+      prosCol.innerHTML = "<h4>Pros</h4>";
+      const prosList = document.createElement("ul");
+      prosList.className = "pros-list";
+      route.pros.forEach(p => {
+        const li = document.createElement("li");
+        li.textContent = p;
+        prosList.appendChild(li);
+      });
+      prosCol.appendChild(prosList);
+
+      consCol.innerHTML = "<h4>Cons</h4>";
+      const consList = document.createElement("ul");
+      consList.className = "cons-list";
+      route.cons.forEach(c => {
+        const li = document.createElement("li");
+        li.textContent = c;
+        consList.appendChild(li);
+      });
+      consCol.appendChild(consList);
+
+      prosCons.appendChild(prosCol);
+      prosCons.appendChild(consCol);
+      body.appendChild(prosCons);
+
+      const footer = document.createElement("div");
+      footer.className = "route-footer";
+
+      const chooseBtn = document.createElement("button");
+      chooseBtn.className = "btn-small primary";
+      chooseBtn.textContent = "Choose this route";
+      chooseBtn.addEventListener("click", () => {
+        quizState.selectedRoute = route.id;
+        renderItinerary();
+        setActiveTab("itinerary-screen");
+      });
+
+      const compareBtn = document.createElement("button");
+      compareBtn.className = "btn-small";
+      compareBtn.textContent = "View itinerary";
+      compareBtn.addEventListener("click", () => {
+        quizState.selectedRoute = route.id;
+        renderItinerary();
+        setActiveTab("itinerary-screen");
+      });
+
+      footer.appendChild(chooseBtn);
+      footer.appendChild(compareBtn);
+
+      body.appendChild(footer);
+      card.appendChild(body);
+      compareGrid.appendChild(card);
+    });
+  }
+
+  // ---------- Itinerary rendering ----------
+
+  function renderItinerary() {
+    const container = document.getElementById("itinerary-content");
+    const route = getRouteById(quizState.selectedRoute);
+    if (!route) {
+      container.className = "empty-itinerary";
+      container.innerHTML =
+        "Choose a route from the <strong>Compare Routes</strong> tab or from the quiz results to see a detailed 14-day itinerary.";
+      return;
+    }
+    container.className = "";
+    container.innerHTML = "";
+
+    const header = document.createElement("div");
+    header.className = "itinerary-header";
+    const left = document.createElement("div");
+    const title = document.createElement("h2");
+    title.textContent = route.name + " · 14-day outline";
+    const tag = document.createElement("span");
+    tag.className = "badge";
+    tag.textContent = route.tag;
+    left.appendChild(title);
+    left.appendChild(tag);
+
+    const right = document.createElement("span");
+    right.textContent = "Use this as a flexible guide – swap days or slow down wherever you like.";
+    header.appendChild(left);
+    header.appendChild(right);
+    container.appendChild(header);
+
+    const intro = document.createElement("p");
+    intro.className = "itinerary-intro";
+    intro.textContent = route.itineraryIntro;
+    container.appendChild(intro);
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "itinerary-table-wrapper";
+    const table = document.createElement("table");
+    const thead = document.createElement("thead");
+    thead.innerHTML =
+      "<tr><th>Day</th><th>Location</th><th>Theme / pace</th><th>Suggested things to do</th><th>Notes</th></tr>";
+    table.appendChild(thead);
+
+    const tbody = document.createElement("tbody");
+    route.itinerary.forEach(row => {
+      const tr = document.createElement("tr");
+      row.forEach(col => {
+        const td = document.createElement("td");
+        td.textContent = col;
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    wrapper.appendChild(table);
+    container.appendChild(wrapper);
+  }
+
+  // ---------- Tabs ----------
+
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      setActiveTab(btn.dataset.tab);
+      if (btn.dataset.tab === "compare-screen") {
+        renderCompare([{ id: quizState.recommendation }]);
+      } else if (btn.dataset.tab === "itinerary-screen") {
+        renderItinerary();
+      }
+    });
+  });
+
+  // ---------- Quiz submit ----------
+
+  document.getElementById("see-matches-btn").addEventListener("click", () => {
+    const results = scoreRoutes();
+    renderCompare(results);
+    setActiveTab("compare-screen");
+    // Scroll to top of compare
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  // Initial render of compare view with no recommendation
+  renderCompare(null);
+</script>
+</body>
+</html>
+```
+
