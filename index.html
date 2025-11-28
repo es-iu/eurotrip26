@@ -76,30 +76,47 @@
       max-width: 1200px;
       width: 100%;
       margin: 0 auto;
-      padding: 16px 20px 28px;
+      padding: 12px 14px 24px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        padding: 16px 20px 28px;
+      }
     }
 
     /* Tabs */
 
     .tabs {
-      display: inline-flex;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       border-radius: 999px;
       padding: 3px;
       background: rgba(255, 255, 255, 0.9);
       border: 1px solid rgba(148, 163, 184, 0.4);
       box-shadow: 0 12px 26px rgba(148, 163, 184, 0.45);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
+      max-width: 420px;
+    }
+
+    @media (max-width: 480px) {
+      .tabs {
+        width: 100%;
+      }
     }
 
     .tab-btn {
+      flex: 1;
       border-radius: 999px;
       border: none;
-      padding: 6px 18px;
-      font-size: 0.85rem;
+      padding: 7px 10px;
+      font-size: 0.82rem;
       cursor: pointer;
       background: transparent;
       color: var(--text-muted);
       transition: all 0.16s ease-out;
+      white-space: nowrap;
     }
 
     .tab-btn.active {
@@ -123,7 +140,7 @@
     .quiz-layout {
       display: grid;
       grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.6fr);
-      gap: 20px;
+      gap: 16px;
     }
 
     @media (max-width: 900px) {
@@ -134,7 +151,7 @@
 
     .quiz-card {
       border-radius: var(--radius-lg);
-      padding: 16px 16px 18px;
+      padding: 14px 14px 16px;
       background: radial-gradient(circle at top left, #fee2e2, #fef3c7, #ffffff);
       border: 1px solid rgba(148, 163, 184, 0.6);
       box-shadow: var(--shadow-soft);
@@ -142,12 +159,12 @@
 
     .quiz-card h2 {
       margin: 0 0 4px;
-      font-size: 1.05rem;
+      font-size: 1.02rem;
     }
 
     .quiz-sub {
       margin: 0 0 10px;
-      font-size: 0.85rem;
+      font-size: 0.83rem;
       color: var(--text-muted);
     }
 
@@ -167,8 +184,8 @@
 
     .pill {
       border-radius: 999px;
-      padding: 8px 14px;
-      font-size: 0.85rem;
+      padding: 8px 12px;
+      font-size: 0.83rem;
       border: 1px solid rgba(148, 163, 184, 0.7);
       background: rgba(255, 255, 255, 0.95);
       color: var(--text-main);
@@ -178,6 +195,7 @@
       gap: 2px;
       transition: all 0.16s ease-out;
       min-width: 150px;
+      text-align: left;
     }
 
     .pill span.label {
@@ -207,7 +225,7 @@
     }
 
     .rank-item {
-      padding: 7px 10px;
+      padding: 7px 8px;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -248,12 +266,37 @@
       color: var(--text-muted);
     }
 
+    .rank-controls {
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .rank-btn {
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: #f9fafb;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      cursor: pointer;
+    }
+
+    /* On touch devices / small screens, rely more on tap-to-reorder than drag */
+    @media (pointer: coarse), (max-width: 640px) {
+      .rank-item {
+        cursor: default;
+      }
+      .rank-controls {
+        display: flex;
+      }
+    }
+
     /* complexity pills */
 
     .complexity-pill {
       border-radius: 999px;
-      padding: 8px 14px;
-      font-size: 0.85rem;
+      padding: 8px 12px;
+      font-size: 0.83rem;
       border: 1px solid rgba(148, 163, 184, 0.7);
       background: rgba(255, 255, 255, 0.95);
       cursor: pointer;
@@ -262,6 +305,7 @@
       gap: 2px;
       min-width: 170px;
       transition: all 0.16s ease-out;
+      text-align: left;
     }
 
     .complexity-pill.selected {
@@ -272,15 +316,24 @@
 
     .quiz-footer {
       display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 10px;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
       margin-top: 10px;
+    }
+
+    @media (min-width: 640px) {
+      .quiz-footer {
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+      }
     }
 
     .helper {
       font-size: 0.76rem;
       color: var(--text-muted);
+      text-align: right;
     }
 
     .btn-primary {
@@ -321,7 +374,7 @@
     .compare-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
+      gap: 16px;
     }
 
     @media (max-width: 900px) {
@@ -334,14 +387,23 @@
       border-radius: 22px;
       background: #ffffff;
       border: 1px solid rgba(148, 163, 184, 0.6);
-      box-shadow: 0 18px 32px rgba(148, 163, 184, 0.5);
+      box-shadow: 0 18px 28px rgba(148, 163, 184, 0.45);
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, border-color 0.12s ease-out, background 0.12s ease-out;
+    }
+
+    .route-card.recommended {
+      border-width: 2px;
+      border-color: #22c55e;
+      background: linear-gradient(135deg, #ecfdf5, #ffffff);
+      box-shadow: 0 24px 40px rgba(34, 197, 94, 0.55);
+      transform: translateY(-2px);
     }
 
     .route-media {
-      height: 170px;
+      height: 160px;
       background: linear-gradient(135deg, #f97316, #fb7185, #0ea5e9);
       position: relative;
     }
@@ -357,8 +419,17 @@
     }
 
     .route-body {
-      padding: 12px 16px 14px;
-      font-size: 0.85rem;
+      padding: 10px 12px 12px;
+      font-size: 0.84rem;
+    }
+
+    @media (min-width: 768px) {
+      .route-body {
+        padding: 12px 16px 14px;
+      }
+      .route-media {
+        height: 170px;
+      }
     }
 
     .route-header-row {
@@ -366,6 +437,7 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 4px;
+      gap: 8px;
     }
 
     .route-name {
@@ -392,7 +464,7 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
 
     .stat-label {
@@ -406,7 +478,7 @@
 
     .hassle {
       font-size: 0.8rem;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
     .hassle span.score {
@@ -432,6 +504,12 @@
       margin: 4px 0 6px;
     }
 
+    @media (max-width: 640px) {
+      .pros-cons {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
     .pros-cons h4 {
       margin: 0 0 2px;
       font-size: 0.8rem;
@@ -451,27 +529,23 @@
       align-items: center;
       gap: 8px;
       margin-top: 6px;
+      flex-wrap: wrap;
     }
 
     .btn-small {
       border-radius: 999px;
       border: 1px solid var(--border-subtle);
       background: #f9fafb;
-      padding: 6px 12px;
+      padding: 6px 10px;
       font-size: 0.8rem;
       cursor: pointer;
     }
 
     .btn-small.primary {
       border-color: transparent;
-      background: linear-gradient(135deg, #f97316, #22c55e);
+      background: linear-gradient(135deg, #22c55e, #16a34a);
       color: #ffffff;
-      box-shadow: 0 10px 18px rgba(248, 113, 113, 0.5);
-    }
-
-    .route-card.recommended {
-      border-color: #22c55eAA;
-      box-shadow: 0 20px 36px rgba(34, 197, 94, 0.55);
+      box-shadow: 0 10px 18px rgba(34, 197, 94, 0.45);
     }
 
     /* ITINERARY */
@@ -481,7 +555,13 @@
       background: #ffffff;
       border: 1px solid rgba(148, 163, 184, 0.7);
       box-shadow: 0 18px 32px rgba(148, 163, 184, 0.55);
-      padding: 14px 16px 16px;
+      padding: 12px 12px 16px;
+    }
+
+    @media (min-width: 768px) {
+      .itinerary-container {
+        padding: 14px 16px 16px;
+      }
     }
 
     .itinerary-header {
@@ -490,15 +570,16 @@
       align-items: baseline;
       gap: 8px;
       margin-bottom: 8px;
+      flex-wrap: wrap;
     }
 
     .itinerary-header h2 {
       margin: 0;
-      font-size: 1rem;
+      font-size: 0.98rem;
     }
 
     .itinerary-header span {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
     }
 
@@ -562,20 +643,34 @@
       color: var(--text-muted);
       padding: 10px;
     }
+
+    .footer-note {
+      max-width: 1200px;
+      margin: 0 auto 18px;
+      padding: 0 14px 4px;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+    }
+
+    @media (min-width: 768px) {
+      .footer-note {
+        padding: 0 20px 4px;
+      }
+    }
   </style>
 </head>
 <body>
 <div class="page-shell">
   <header>
     <div class="header-inner">
-      <h1>Europe trip Planner</h1>
+      <h1>Eurotrip Planner</h1>
       <p>June 15–30, 2026 · Find your perfect route through Germany, Bulgaria &amp; Greece.</p>
     </div>
   </header>
   <main>
     <div class="tabs">
       <button class="tab-btn active" data-tab="quiz-screen">Quiz</button>
-      <button class="tab-btn" data-tab="compare-screen">Compare Routes</button>
+      <button class="tab-btn" data-tab="compare-screen">Compare</button>
       <button class="tab-btn" data-tab="itinerary-screen">Itinerary</button>
     </div>
 
@@ -592,26 +687,30 @@
               <span class="sub">“Park us on a terrace with views and let us melt into the sunset.”</span>
             </button>
             <button class="pill" data-value="balanced">
-              <span class="label">Balanced Adventure</span>
+              <span class="label">Balanced Mix</span>
               <span class="sub">“Some exploring, some lazy days – we want both stories and naps.”</span>
             </button>
             <button class="pill" data-value="adventure">
-              <span class="label">Maximum Exploration</span>
+              <span class="label">Max Exploration</span>
               <span class="sub">“We love moving around and packing in experiences.”</span>
             </button>
           </div>
 
-          <div style="height:16px"></div>
+          <div style="height:14px"></div>
 
           <div class="step-label">Step 2</div>
           <h2>Rank what matters most</h2>
-          <p class="quiz-sub">Drag to reorder – top of the list is your #1 priority.</p>
+          <p class="quiz-sub">On a phone, use ▲ / ▼ to shuffle items. Top of the list is #1.</p>
           <ul class="rank-list" id="priority-list">
             <li class="rank-item" draggable="true" data-key="romance">
               <div class="rank-number">1</div>
               <div class="rank-label">
                 Romance &amp; intimacy
                 <div class="rank-sub">Time together, slow mornings, candlelight dinners.</div>
+              </div>
+              <div class="rank-controls">
+                <button type="button" class="rank-btn up">▲</button>
+                <button type="button" class="rank-btn down">▼</button>
               </div>
             </li>
             <li class="rank-item" draggable="true" data-key="culture">
@@ -620,12 +719,20 @@
                 Culture &amp; history
                 <div class="rank-sub">Old streets, museums, stories, architecture.</div>
               </div>
+              <div class="rank-controls">
+                <button type="button" class="rank-btn up">▲</button>
+                <button type="button" class="rank-btn down">▼</button>
+              </div>
             </li>
             <li class="rank-item" draggable="true" data-key="food">
               <div class="rank-number">3</div>
               <div class="rank-label">
                 Food &amp; wine
                 <div class="rank-sub">Memorable meals, cafés and local specialties.</div>
+              </div>
+              <div class="rank-controls">
+                <button type="button" class="rank-btn up">▲</button>
+                <button type="button" class="rank-btn down">▼</button>
               </div>
             </li>
             <li class="rank-item" draggable="true" data-key="nature">
@@ -634,17 +741,21 @@
                 Views &amp; nature
                 <div class="rank-sub">Sea views, sunsets, hikes, beaches.</div>
               </div>
+              <div class="rank-controls">
+                <button type="button" class="rank-btn up">▲</button>
+                <button type="button" class="rank-btn down">▼</button>
+              </div>
             </li>
           </ul>
           <p class="guided-tip" style="font-size:0.75rem;margin-top:6px;">
-            Tip: If you’re torn, just put what you’d be saddest to miss at the top.
+            If you’re torn, just put what you’d be saddest to miss at the top.
           </p>
         </section>
 
         <section class="quiz-card">
           <div class="step-label">Step 3</div>
           <h2>How much logistics can you handle?</h2>
-          <p class="quiz-sub">Think about packing/unpacking, airport days and moving between cities.</p>
+          <p class="quiz-sub">Think about packing, airports and moving between cities.</p>
           <div class="pill-row" id="complexity-options">
             <button class="complexity-pill" data-value="low">
               <span class="label">Keep it ultra-simple</span>
@@ -684,12 +795,12 @@
     <section id="itinerary-screen" class="screen">
       <div class="itinerary-container">
         <div id="itinerary-content" class="empty-itinerary">
-          Choose a route from the <strong>Compare Routes</strong> tab or from the quiz results to see a detailed 14-day itinerary.
+          Choose a route from the <strong>Compare</strong> tab or from the quiz results to see a detailed 14-day itinerary.
         </div>
       </div>
     </section>
   </main>
-  <div class="footer-note" style="max-width:1200px;margin:0 auto 18px;padding:0 20px 4px;font-size:0.74rem;color:var(--text-muted);">
+  <div class="footer-note">
     Scores and suggestions are based on general patterns. Use this as a friendly starting point, then adjust dates and details to match your energy in the moment.
   </div>
 </div>
@@ -725,7 +836,7 @@
         culture: 2,
         food: 3,
         nature: 3,
-        complexity: 1 // 1 = low, 2 = medium, 3 = high
+        complexity: 1
       },
       itineraryIntro: "Two weeks of Greece-only relaxation with a mix of Athens energy and long, dreamy days on Santorini.",
       itinerary: [
@@ -891,11 +1002,11 @@
   // ---------- State ----------
 
   const quizState = {
-    vibe: null,           // "relax" | "balanced" | "adventure"
-    complexity: null,     // "low" | "medium" | "high"
-    priorities: ["romance", "culture", "food", "nature"], // ordered
-    recommendation: null, // route id
-    selectedRoute: null   // for itinerary view
+    vibe: null,
+    complexity: null,
+    priorities: ["romance", "culture", "food", "nature"],
+    recommendation: null,
+    selectedRoute: null
   };
 
   // ---------- Helpers ----------
@@ -905,7 +1016,7 @@
     const helper = document.getElementById("quiz-helper");
     if (quizState.vibe && quizState.complexity && quizState.priorities.length === 4) {
       btn.disabled = false;
-      helper.textContent = "Ready when you are – click to see which route matches you best.";
+      helper.textContent = "Ready when you are – tap to see which route matches you best.";
     } else {
       btn.disabled = true;
       helper.textContent = "Answer all three steps and I’ll suggest the route that fits you best.";
@@ -947,9 +1058,17 @@
     });
   });
 
-  // Step 2: ranking (drag and drop)
+  // Step 2: ranking (drag + tap controls)
   const priorityList = document.getElementById("priority-list");
   let dragSrcEl = null;
+
+  function recomputePriorities() {
+    Array.from(priorityList.children).forEach((li, idx) => {
+      li.querySelector(".rank-number").textContent = idx + 1;
+    });
+    quizState.priorities = Array.from(priorityList.children).map(li => li.dataset.key);
+    updateQuizButtonState();
+  }
 
   function handleDragStart(e) {
     dragSrcEl = this;
@@ -984,14 +1103,9 @@
         } else {
           priorityList.insertBefore(dragSrcEl, this);
         }
-        // update numbers and state
-        Array.from(priorityList.children).forEach((li, idx) => {
-          li.querySelector(".rank-number").textContent = idx + 1;
-        });
-        quizState.priorities = Array.from(priorityList.children).map(li => li.dataset.key);
+        recomputePriorities();
       }
     }
-    updateQuizButtonState();
     return false;
   }
 
@@ -1008,6 +1122,36 @@
     li.addEventListener("dragend", handleDragEnd);
   });
 
+  // Tap-based reorder for mobile
+  function moveItem(li, direction) {
+    const siblings = Array.from(priorityList.children);
+    const index = siblings.indexOf(li);
+    const newIndex = index + direction;
+    if (newIndex < 0 || newIndex >= siblings.length) return;
+    if (direction === -1) {
+      priorityList.insertBefore(li, siblings[newIndex]);
+    } else {
+      priorityList.insertBefore(li, siblings[newIndex].nextSibling);
+    }
+    recomputePriorities();
+  }
+
+  priorityList.querySelectorAll(".rank-btn.up").forEach(btn => {
+    btn.addEventListener("click", e => {
+      e.stopPropagation();
+      const li = btn.closest(".rank-item");
+      moveItem(li, -1);
+    });
+  });
+
+  priorityList.querySelectorAll(".rank-btn.down").forEach(btn => {
+    btn.addEventListener("click", e => {
+      e.stopPropagation();
+      const li = btn.closest(".rank-item");
+      moveItem(li, 1);
+    });
+  });
+
   // ---------- Scoring algorithm ----------
 
   function scoreRoutes() {
@@ -1016,8 +1160,7 @@
     const order = quizState.priorities;
 
     const vibeWeights = { relax: 3, balanced: 3, adventure: 3 };
-
-    const priorityWeights = [4, 3, 2, 1]; // order from top to bottom
+    const priorityWeights = [4, 3, 2, 1];
     const complexityMap = { low: 1, medium: 2, high: 3 };
 
     const results = routes.map(route => {
@@ -1033,7 +1176,7 @@
         score += p.adventure * vibeWeights.adventure + p.balanced * 1;
       }
 
-      // Priority ranking (romance, culture, food, nature)
+      // Priority ranking
       order.forEach((key, idx) => {
         const w = priorityWeights[idx];
         if (key === "romance") score += p.romance * w;
@@ -1042,13 +1185,13 @@
         if (key === "nature") score += p.nature * w;
       });
 
-      // Complexity preference: small penalty when mismatch
+      // Complexity preference
       const preferred = complexityMap[complexityPref];
       const routeComplex = p.complexity;
       const diff = Math.abs(preferred - routeComplex);
-      score -= diff * 3; // each step away from ideal subtracts points
+      score -= diff * 3;
 
-      // Small bonus for lower hassle overall to favor easier routes
+      // Small bonus for lower hassle
       score += Math.max(0, 10 - route.hassleScore) * 0.5;
 
       return { id: route.id, score };
@@ -1059,7 +1202,7 @@
     return results;
   }
 
-  // ---------- Compare routes rendering ----------
+  // ---------- Compare rendering ----------
 
   const compareGrid = document.getElementById("compare-grid");
   const compareIntro = document.getElementById("compare-intro");
@@ -1069,9 +1212,8 @@
 
     const recommendedId = results ? results[0].id : quizState.recommendation;
     if (recommendedId) {
-      const best = getRouteById(recommendedId);
       compareIntro.textContent =
-        "Based on your answers, this is your best-fit route (highlighted in green). You can still explore the others and switch anytime.";
+        "Based on your answers, this route glows green as your best match. You can still tap into any card to explore or switch.";
     }
 
     routes.forEach(route => {
@@ -1201,7 +1343,7 @@
     if (!route) {
       container.className = "empty-itinerary";
       container.innerHTML =
-        "Choose a route from the <strong>Compare Routes</strong> tab or from the quiz results to see a detailed 14-day itinerary.";
+        "Choose a route from the <strong>Compare</strong> tab or from the quiz results to see a detailed 14-day itinerary.";
       return;
     }
     container.className = "";
@@ -1271,11 +1413,10 @@
     const results = scoreRoutes();
     renderCompare(results);
     setActiveTab("compare-screen");
-    // Scroll to top of compare
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
-  // Initial render of compare view with no recommendation
+  // First-time render
   renderCompare(null);
 </script>
 </body>
